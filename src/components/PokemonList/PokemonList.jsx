@@ -15,6 +15,7 @@ function PokemonList() {
 
         const response = await axios.get(pokedexUrl); //this downloads list of 20 pokemons
         const pokemonResults = response.data.results; //we get the array of pokemons
+        console.log(pokemonResults);
 
         //iterating over the array of pokemons and using their url to create an array of promises that will download those 20 pokemons
         const pokemonResultPromise = pokemonResults.map((pokemon) => axios.get(pokemon.url));
@@ -47,7 +48,7 @@ function PokemonList() {
 
     return (
         <div className="pokemon-list-wrapper">
-            <div className="pokemon-wrapper">{isLoading ? "Loading..." : pokemonList.map((p) => <Pokemon name={p.name} image={p.image} key={p.id} />)}</div>
+            <div className="pokemon-wrapper">{isLoading ? "Loading..." : pokemonList.map((p) => <Pokemon name={p.name} image={p.image} key={p.id} id={p.id} />)}</div>
             <div className="controls">
                 <button disabled={prevUrl == null} onClick={() => setPokedexUrl(prevUrl)}>
                     Prev
