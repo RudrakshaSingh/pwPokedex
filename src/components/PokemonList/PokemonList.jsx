@@ -6,10 +6,14 @@ function PokemonList() {
     const [pokemonList, setPokemonList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const POKEDEX_URL = "https://pokeapi.co/api/v2/pokemon";
+    const [pokedexUrl, setPokedexUrl] = useState("https://pokeapi.co/api/v2/pokemon");
+    const [nextUrl, setNextUrl] = useState("");
+    const [prevUrl, setPrevUrl] = useState("");
 
     async function downloadPokemons() {
-        const response = await axios.get(POKEDEX_URL); //this downloads list of 20 pokemons
+        setIsLoading(true);
+
+        const response = await axios.get(pokedexUrl); //this downloads list of 20 pokemons
         const pokemonResults = response.data.results; //we get the array of pokemons
 
         //iterating over the array of pokemons and using their url to create an array of promises that will download those 20 pokemons
@@ -29,23 +33,28 @@ function PokemonList() {
                 types: pokemon.types,
             };
         });
-        console.log("hi", res);
+        console.log(res);
+        setNextUrl(response.data.next);
+        setPrevUrl(response.data.previous);
 
         setPokemonList(res);
-        console.log("hi", pokemonList);
         setIsLoading(false);
     }
     useEffect(() => {
         downloadPokemons();
-    }, []); //callback the content will execute when element first get rendered.if dependancy array is not given if will execute callback everytime component renders.if pass dependency array if will execute only first time
+    }, [pokedexUrl]); //callback the content will execute when element first get rendered.if dependancy array is not given if will execute callback everytime component renders.if pass dependency array if will execute only first time
     //we can give [x] to execute after changes in x only.to track particular variables
 
     return (
         <div className="pokemon-list-wrapper">
             <div className="pokemon-wrapper">{isLoading ? "Loading..." : pokemonList.map((p) => <Pokemon name={p.name} image={p.image} key={p.id} />)}</div>
             <div className="controls">
-                <button>Prev</button>
-                <button>Next</button>
+                <button disabled={prevUrl == null} onClick={() => setPokedexUrl(prevUrl)}>
+                    Prev
+                </button>
+                <button disabled={nextUrl == null} onClick={() => setPokedexUrl(nextUrl)}>
+                    Next
+                </button>
             </div>
         </div>
     );
