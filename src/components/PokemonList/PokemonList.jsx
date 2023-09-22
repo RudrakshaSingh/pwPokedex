@@ -1,21 +1,23 @@
 import "./PokemonList.css";
 import Pokemon from "../Pokemon/Pokemon";
 import usePokemonList from "../../hooks/usePokemonList";
+import { useEffect } from "react";
 function PokemonList() {
-    const [pokemonListState, setPokemonListState] = usePokemonList("https://pokeapi.co/api/v2/pokemon", false);
-
+    const [pokemonListState, setPokemonListState] = usePokemonList(false);
+    useEffect(() => {
+        console.log("render");
+    });
     return (
         <div className="pokemon-list-wrapper">
-            <div className="pokemon-wrapper">{pokemonListState.isLoading ? "Loading..." : pokemonListState.pokemonList.map((p) => <Pokemon name={p.name} image={p.image} key={p.id} id={p.id} />)}</div>
+            <div className="pokemon-wrapper">
+                {pokemonListState.isLoading ? "Loading...." : pokemonListState.pokemonList.map((p) => <Pokemon name={p.name} image={p.image} key={p.id} id={p.id} />)}
+            </div>
             <div className="controls">
                 <button
                     disabled={pokemonListState.prevUrl == null}
                     onClick={() => {
                         const urlToSet = pokemonListState.prevUrl;
-                        setPokemonListState((state) => ({
-                            ...state,
-                            pokedexUrl: urlToSet,
-                        }));
+                        setPokemonListState({ ...pokemonListState, pokedexUrl: urlToSet });
                     }}
                 >
                     Prev
@@ -25,11 +27,7 @@ function PokemonList() {
                     onClick={() => {
                         console.log(pokemonListState);
                         const urlToSet = pokemonListState.nextUrl;
-
-                        setPokemonListState((state) => ({
-                            ...state,
-                            pokedexUrl: urlToSet,
-                        }));
+                        setPokemonListState({ ...pokemonListState, pokedexUrl: urlToSet });
                     }}
                 >
                     Next
@@ -38,4 +36,5 @@ function PokemonList() {
         </div>
     );
 }
+
 export default PokemonList;
