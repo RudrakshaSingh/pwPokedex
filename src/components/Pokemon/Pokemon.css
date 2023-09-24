@@ -8,10 +8,10 @@
     align-items: center;
 }
 
-
 .pokemon-name {
     font-size: larger;
     letter-spacing: 0.5rem;
+    color: black;
 }
 .pokemon-image {
     margin-top: 1rem;
@@ -22,4 +22,3 @@
 .pokemon:hover {
     background-color: beige;
 }
-

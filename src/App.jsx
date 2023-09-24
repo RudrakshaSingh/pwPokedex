@@ -5,8 +5,10 @@ import CustomRoutes from "./routes/CustomRoutes";
 function App() {
     return (
         <div className="outer-pokedex">
-            <h1 id="pokedex-heading">
-                <Link to="/">Pokedex</Link>
+            <h1 id="-heading">
+                <Link to="/" className="hi">
+                    Pokedex
+                </Link>
             </h1>
             <CustomRoutes />
         </div>
